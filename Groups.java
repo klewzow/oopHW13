@@ -4,112 +4,80 @@ import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Groups {
+public class Groups implements Voenkomat {
 
-	private Student[] studentsInGroup ;
+	private Student[] studentsInGroup;
 
 	public Groups() {
 		super();
 	}
+
 	public Groups(int valueStudent) {
 		super();
-		this.studentsInGroup =   new Student[valueStudent];
+		this.studentsInGroup = new Student[valueStudent];
 	}
 
 	public void addStudentInteractive() {
 
-		Student student = new Student();
-
 		String arr[] = { "name \"  String \"", "surename \"  String \" ", "Age \"  int  : 16 - 55\"",
 				"gender true\\false or man \\ woman", "nacionality  \"  String \"", "iPn", "groupName  \" int \"",
 				"course \" int \"" };
-
-		@SuppressWarnings("resource")
+		Student student = new Student();
 		Scanner sc = new Scanner(System.in);
-
 		for (int i = 0;;) {
-
 			try {
-
+				if (i > 7) {
+					break;
+				}
 				System.out.println(arr[i].equals("iPn") ? "Added " + arr[i] + " : " : "Input :  " + arr[i] + " : \n");
-
-				if (i == 0) {
-					student.setName(correctTnputString(sc.nextLine()));
-					i++;
-					continue;
-				}
-				if (i == 1) {
-					student.setSurename(correctTnputString(sc.nextLine()));
-					i++;
-					continue;
-				}
-				if (i == 2) {
-					try {
-						student.setAge(correctTnputInt(sc.nextLine(), 16, 55));
-						i++;
-						continue;
-					} catch (NumberFormatException e) {
-						System.err.println("Incorect - " + arr[i]);
-						continue;
-					}
-				}
-				if (i == 3) {
-					try {
-						student.setGender(correctInputBoolean(sc.nextLine()));
-						i++;
-						continue;
-					} catch (NumberFormatException e) {
-						System.err.println("Incorect - " + arr[i]);
-						continue;
-					}
-				}
-				if (i == 4) {
-					student.setNacionality(correctTnputString(sc.nextLine()));
-					i++;
-					continue;
-				}
-				if (i == 5) {
-
-					student.setiPn(addedtLong());
-					i++;
-					continue;
-
-				}
-				if (i == 6) {
-
-					try {
-						student.setGroupName(correctTnputInt(sc.nextLine(), 0, Integer.MAX_VALUE));
-						i++;
-						continue;
-					} catch (NumberFormatException e) {
-						System.err.println("Incorect - " + arr[i]);
-						continue;
-					}
-				}
-				if (i == 7) {
-
-					try {
-						student.setCourse(correctTnputInt(sc.nextLine(), 0, 5));
-					} catch (NumberFormatException e) {
-						System.err.println("Incorect - " + arr[i]);
-						continue;
-					}
-				}
-
-				break;
-
+				checkData(i, sc, student);
+				i++;
+				continue;
 			} catch (IncorrectInputString e) {
-
 				continue;
 			} catch (InputMismatchException e) {
 				e.printStackTrace();
 				System.out.println("Input correct " + arr[i]);
 				continue;
+			} catch (NumberFormatException e) {
+				System.err.println("Incorect - " + arr[i]);
+				continue;
 			}
-
 		}
 
-		addStudent(student);
+	}
+
+	private void checkData(int i, Scanner sc, Student student)
+			throws IncorrectInputString, NumberFormatException, InputMismatchException {
+		switch (i) {
+		case 0:
+			student.setName(correctTnputString(sc.nextLine()));
+			break;
+		case 1:
+			student.setSurename(correctTnputString(sc.nextLine()));
+			break;
+		case 2:
+			student.setAge(correctTnputInt(sc.nextLine(), 16, 55));
+			break;
+		case 3:
+			student.setGender(correctInputBoolean(sc.nextLine()));
+			break;
+		case 4:
+			student.setNacionality(correctTnputString(sc.nextLine()));
+			break;
+		case 5:
+			student.setiPn(addedtLong());
+			break;
+		case 6:
+			student.setGroupName(correctTnputInt(sc.nextLine(), 0, Integer.MAX_VALUE));
+			break;
+		case 7:
+			student.setCourse(correctTnputInt(sc.nextLine(), 0, 5));
+			this.addStudent(student);
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + i);
+		}
 	}
 
 	private String correctTnputString(String string) throws IncorrectInputString {
@@ -125,6 +93,8 @@ public class Groups {
 		int res = Integer.parseInt(string);
 		if (res < minAge || res > maxAge) {
 			throw new NumberFormatException();
+		} else {
+
 		}
 		return res;
 	}
@@ -192,8 +162,7 @@ public class Groups {
 	}
 
 	public void delStudent(Student student) {
-		int srt = 0;
-		final Student[] tmpStudent = new Student[this.studentsInGroup.length];
+
 		for (int i = 0; i < studentsInGroup.length; i++) {
 			try {
 
@@ -207,6 +176,15 @@ public class Groups {
 			}
 
 		}
+
+		mySortNull(this.getStudentsInGroup());
+
+	}
+
+	private void mySortNull(Student[] groups) {
+		int srt = 0;
+		final Student[] tmpStudent = new Student[this.studentsInGroup.length];
+
 		for (int i = 0; i < this.studentsInGroup.length; i++) {
 			try {
 				if (this.studentsInGroup[i].getiPn() != 0) {
@@ -252,10 +230,30 @@ public class Groups {
 		return g;
 	}
 
+	@Override
+	public Groups searchrRecruits() {
+
+		Groups toArmy = new Groups(this.getStudentsInGroup().length);
+		for (Student student : this.getStudentsInGroup()) {
+
+			try {
+				if (student.isGender() == true && student.getAge() >= 18) {
+					toArmy.addStudent(student);
+				}
+			} catch (NullPointerException e) {
+				continue;
+			}
+
+		}
+
+		return toArmy;
+	}
+
 	public Student[] getStudentsInGroup() {
 		return this.studentsInGroup;
 	}
-	public Student  getStudentsInGroup(int inc) {
+
+	public Student getStudentsInGroup(int inc) {
 		return this.studentsInGroup[inc];
 	}
 

@@ -66,11 +66,11 @@ public class Main {
 		System.out.println("Search Student - \n" + grupA.searchStodentToSurename("Klark"));
 		System.out.println("\n\n ");
 		System.out.println("From army :");
-		Voenkomat v = new Voenkomat();
 
-		Groups fromVoenkom = v.returnGroup(grupA);
+		Voenkomat vm = grupA.searchrRecruits();
+		Groups recruts = vm.searchrRecruits();
 
-		for (Student st : fromVoenkom.getStudentsInGroup()) {
+		for (Student st : recruts.getStudentsInGroup()) {
 			System.out.println(st);
 		}
 

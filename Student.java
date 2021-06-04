@@ -1,9 +1,6 @@
 package com.gmail.klewzow;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
-public class Student extends Human implements Comparable {
+public class Student extends Human implements Comparable  {
 
 	private int groupName;
 	private int course;
